@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input parameters for AURORA v1.0</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1F618D;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #117A65;
+            font-size: 18px;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .category {
+            margin-bottom: 30px;
+        }
+        .parameter {
+            margin-bottom: 15px;
+            display: flex;
+        }
+        .parameter label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            flex: 0 0 17%;
+        }
+        .parameter .description {
+            font-size: 14px;
+            color: #777;
+            margin-left: 10px;
+            flex: 0 0 35%;
+        }
+        .parameter input[type="text"],
+        .parameter input[type="number"],
+        .parameter select {
+            width: calc(100% - 105px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        .parameter input[type="radio"] {
+            margin-right: 5px;
+            margin-top: -5px;
+            vertical-align: middle;
+        }
+        .parameter label {
+            display: inline-block;
+            width: 100px;
+            margin-top: 5px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Input parameters for AURORA v1.0</h1>
+        <p class="subtitle">Input parameter-file generator for the automated pipeline AURORA v1.0 (Automated uGMRT Radio Observation data Reduction Algorithm), developed by Ayan Biswas. Use of desktop version is strictly recommended while editing this html file. Click the "Export to JSON" button to generate the parameter file which should be kept in the directory from which CASA is initialized. Warning: v1.0 deals only with continnum point-source imaging, but may give satisfactory results for extended observations.</p>
+
+        <!-- Strictly Necessary Inputs -->
+        <div class="category">
+            <h2>Strictly Necessary Inputs (must be reviewed)</h2>
+            <div class="parameter">
+                <label>proj_name:</label>
+                <span class="description">Your project name</span>
+                <input type="text" id="proj_name" value="Pipeline_Analysis">
+            </div>
+            <div class="parameter">
+                <label>work_dir:</label>
+                <span class="description">Working directory</span>
+                <input type="text" id="work_dir" value="">
+            </div>
+            <div class="parameter">
+                <label>inp_file_type:</label>
+                <span class="description">Input is FITS or measurement set?</span>
+                <select id="inp_file_type">
+                    <option value="FITS">FITS</option>
+                    <option value="ms">ms</option>
+                </select>
+            </div>
+            <div class="parameter">
+                <label>file_name:</label>
+                <span class="description">Input file name (FITS/measurement set)</span>
+                <input type="text" id="ms_or_fits_file" value="your_file">
+            </div>
+            <div class="parameter">
+                <label>do_ini_flag:</label>
+                <span class="description">Perform initial calibration on uncalibrated data?</span>
+                <input type="radio" id="do_ini_flagTrue" name="do_ini_flag" value="True" checked>
+                <label for="do_ini_flagTrue">True</label>
+                <input type="radio" id="do_ini_flagFalse" name="do_ini_flag" value="">
+                <label for="do_ini_flagFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>do_ini_cal:</label>
+                <span class="description">Do calibration after initial flagging?</span>
+                <input type="radio" id="do_ini_calTrue" name="do_ini_cal" value="True" checked>
+                <label for="do_ini_calTrue">True</label>
+                <input type="radio" id="do_ini_calFalse" name="do_ini_cal" value="">
+                <label for="do_ini_calFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>redo_cal:</label>
+                <span class="description">Perform a second round of calibration after target-flagging?</span>
+                <input type="radio" id="redo_calTrue" name="redo_cal" value="True">
+                <label for="redo_calTrue">True</label>
+                <input type="radio" id="redo_calFalse" name="redo_cal" value="" checked>
+                <label for="redo_calFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>do_target_split:</label>
+                <span class="description">Split the target if you want a target ms ready for imaging?</span>
+                <input type="radio" id="do_target_splitTrue" name="do_target_split" value="True" checked>
+                <label for="do_target_splitTrue">True</label>
+                <input type="radio" id="do_target_splitFalse" name="do_target_split" value="">
+                <label for="do_target_splitFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>make_image:</label>
+                <span class="description">Make Initial Image? (no selfcal)</span>
+                <input type="radio" id="make_imageTrue" name="make_image" value="True" checked>
+                <label for="make_imageTrue">True</label>
+                <input type="radio" id="make_imageFalse" name="make_image" value="">
+                <label for="make_imageFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>do_selfcal:</label>
+                <span class="description">Perform phase and amplitude selfcal and make resulting images?</span>
+                <input type="radio" id="do_selfcalTrue" name="do_selfcal" value="True" checked>
+                <label for="do_selfcalTrue">True</label>
+                <input type="radio" id="do_selfcalFalse" name="do_selfcal" value="">
+                <label for="do_selfcalFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>make_stokes_V:</label>
+                <span class="description">Make Stokes V image?</span>
+                <input type="radio" id="make_stokes_VTrue" name="make_stokes_V" value="True">
+                <label for="make_stokes_VTrue">True</label>
+                <input type="radio" id="make_stokes_VFalse" name="make_stokes_V" value="" checked>
+                <label for="make_stokes_VFalse">False</label>
+            </div>
+            <!-- Add the remaining strictly necessary parameters here -->
+        </div>
+
+        <!-- Important Parameters (that can be kept as defaults) -->
+        <div class="category">
+            <h2>Important Parameters (that can be kept as defaults)</h2>
+            <div class="parameter">
+                <label>Flag CC Baselines:</label>
+                <span class="description">Flag the CC-baselines of uGMRT?</span>
+                <input type="radio" id="flag_cc_blTrue" name="flag_cc_bl" value="True">
+                <label for="flag_cc_blTrue">True</label>
+                <input type="radio" id="flag_cc_blFalse" name="flag_cc_bl" value="" checked>
+                <label for="flag_cc_blFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>bad_ants:</label>
+                <span class="description">Any known bad antennae?</span>
+                <input type="text" id="bad_ants" value="">
+            </div>
+            <div class="parameter">
+                <label>ref_ant:</label>
+                <span class="description">Reference antenna to be used for calibration?</span>
+                <input type="text" id="ref_ant" value="C13">
+            </div>
+            <div class="parameter">
+                <label>channel_avg:</label>
+                <span class="description">Number of channel averaged after calibration</span>
+                <input type="number" id="channel_avg" value="4">
+            </div>
+            <div class="parameter">
+                <label>do_hanningsmoth:</label>
+                <span class="description">If hanning smoothing is needed</span>
+                <input type="radio" id="do_hanningsmothTrue" name="do_hanningsmoth" value="True">
+                <label for="do_hanningsmothTrue">True</label>
+                <input type="radio" id="do_hanningsmothFalse" name="do_hanningsmoth" value="" checked>
+                <label for="do_hanningsmothFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>setjy_standard:</label>
+                <span class="description">Standard used while running setjy: Choose from options</span>
+                <select id="setjy_standard">
+                    <option value="Perley-Butler 2017">Perley-Butler 2017</option>
+                    <option value="Perley-Butler 2013">Perley-Butler 2013</option>
+                    <option value="Perley-Butler 2010">Perley-Butler 2010</option>
+                    <option value="Scaife-Heald 2012">Scaife-Heald 2012</option>
+                    <option value="Butler-JPL-Horizons 2012">Butler-JPL-Horizons 2012</option>
+                </select>
+            </div>
+            <div class="parameter">
+                <label>image_size:</label>
+                <span class="description">Give image size in integer value (suggested:: b5/ b4/ b3- 6144)</span>
+                <input type="number" id="image_size" value="6144">
+            </div>
+            <div class="parameter">
+                <label>cell_size:</label>
+                <span class="description">Give cell size in str value in arcsec (suggested:: b5- 0.4, b4- 0.8, b3- 1.6)</span>
+                <input type="text" id="cell_size" value="1.2arcsec">
+            </div>
+            <div class="parameter">
+                <label>num_phasecal:</label>
+                <span class="description">Number of phase selfcal</span>
+                <input type="number" id="num_phasecal" value="4">
+            </div>
+            <div class="parameter">
+                <label>num_apcal:</label>
+                <span class="description">Number of ap selfcal</span>
+                <input type="number" id="num_apcal" value="2">
+            </div>
+            <div class="parameter">
+                <label>sol_int_phase:</label>
+                <span class="description">Solution intervals for phasecal in minutes</span>
+                <input type="text" id="sol_int_phase" value="['6min', '4min', '4min', '2min', '2min']">
+            </div>
+            <div class="parameter">
+                <label>num_iter_phase:</label>
+                <span class="description">Number of iterations for phasecal</span>
+                <input type="text" id="num_iter_phase" value="[5000, 6000, 7000, 8000, 9000]">
+            </div>
+            <div class="parameter">
+                <label>threshold_phase:</label>
+                <span class="description">Thresholds for phasecal</span>
+                <input type="text" id="threshold_phase" value="['0.01mJy', '0.01mJy', '0.01mJy', '0.01mJy', '0.01mJy']">
+            </div>
+            <div class="parameter">
+                <label>sol_int_ap:</label>
+                <span class="description">Solution intervals for ap-cal</span>
+                <input type="text" id="sol_int_ap" value="['90sec', '1min']">
+            </div>
+            <div class="parameter">
+                <label>num_iter_ap:</label>
+                <span class="description">Number of iterations for ap-cal</span>
+                <input type="text" id="num_iter_ap" value="[6000, 10000]">
+            </div>
+            <div class="parameter">
+                <label>threshold_ap:</label>
+                <span class="description">Thresholds for ap-cal</span>
+                <input type="text" id="threshold_ap" value="['0.01mJy', '0.01mJy']">
+            </div>
+            <!-- Add the remaining important parameters here -->
+        </div>
+
+        <!-- Expert Parameters (Change only if you are sure) -->
+        <div class="category">
+            <h2>Expert Parameters (Change only if you are sure)</h2>
+            <div class="parameter">
+                <label>solint_sec:</label>
+                <span class="description">Solution interval in seconds for calibrator gain solution</span>
+                <input type="number" id="solint_sec" value="120">
+            </div>
+            <div class="parameter">
+                <label>quack_interval:</label>
+                <span class="description">Quacking interval for each scan (beg + endb)</span>
+                <input type="number" id="quack_interval" value="10">
+            </div>
+            <div class="parameter">
+                <label>uvrange_fluxcal:</label>
+                <span class="description">If hanning smoothing is needed</span>
+                <input type="radio" id="uvrange_fluxcalTrue" name="uvrange_fluxcal" value="True">
+                <label for="uvrange_fluxcalTrue">True</label>
+                <input type="radio" id="uvrange_fluxcalFalse" name="uvrange_fluxcal" value="" checked>
+                <label for="uvrange_fluxcalFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>uv_fluxcal:</label>
+                <span class="description">If uvrange_fluxcal = True, specify the value</span>
+                <input type="text" id="uv_fluxcal" value="">
+            </div>
+            <div class="parameter">
+                <label>clip_zero:</label>
+                <span class="description">True if zero-amplitude clipping is needed</span>
+                <input type="radio" id="clip_zeroTrue" name="clip_zero" value="True" checked>
+                <label for="clip_zeroTrue">True</label>
+                <input type="radio" id="clip_zeroFalse" name="clip_zero" value="">
+                <label for="clip_zeroFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>min_snr_calib:</label>
+                <span class="description">Mean SNR during caltable calculations</span>
+                <input type="number" id="min_snr_calib" value="2">
+            </div>
+            <div class="parameter">
+                <label>parang_is:</label>
+                <span class="description">If parallactic angle correction is needed</span>
+                <input type="radio" id="parang_isTrue" name="parang_is" value="True" checked>
+                <label for="parang_isTrue">True</label>
+                <input type="radio" id="parang_isFalse" name="parang_is" value="">
+                <label for="parang_isFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>clip_fluxcal:</label>
+                <span class="description">Range beyond which data should be clipped for flux cal.</span>
+                <input type="number" id="clip_fluxcal" value="80">
+            </div>
+            <div class="parameter">
+                <label>clip_phasecal:</label>
+                <span class="description">Clip range for phase calibrator</span>
+                <input type="number" id="clip_phasecal" value="60">
+            </div>
+            <div class="parameter">
+                <label>clip_target:</label>
+                <span class="description">Clip range for target field</span>
+                <input type="number" id="clip_target" value="30">
+            </div>
+            <div class="parameter">
+                <label>extend_percent:</label>
+                <span class="description">Percentage used while doing extendflag</span>
+                <input type="number" id="extend_percent" value="80">
+            </div>
+            <div class="parameter">
+                <label>calib_rounds:</label>
+                <span class="description">Total rounds of iterative calibration</span>
+                <input type="number" id="calib_rounds" value="5">
+            </div>
+            <div class="parameter">
+                <label>global_uvrange_is:</label>
+                <span class="description">If you want to set a global uvrange during calibration</span>
+                <input type="radio" id="global_uvrange_isTrue" name="global_uvrange_is" value="True">
+                <label for="global_uvrange_isTrue">True</label>
+                <input type="radio" id="global_uvrange_isFalse" name="global_uvrange_is" value="" checked>
+                <label for="global_uvrange_isFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>global_uvrange:</label>
+                <span class="description">If global_uvrange_is = True, specify the range</span>
+                <input type="text" id="global_uvrange" value="">
+            </div>
+            <div class="parameter">
+                <label>do_avg_flag:</label>
+                <span class="description">Flag averaged target data?</span>
+                <input type="radio" id="do_avg_flagTrue" name="do_avg_flag" value="True" checked>
+                <label for="do_avg_flagTrue">True</label>
+                <input type="radio" id="do_avg_flagFalse" name="do_avg_flag" value="">
+                <label for="do_avg_flagFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>spw_ID_target:</label>
+                <span class="description">Select channels as '0:11~240' etc. (for target image)</span>
+                <input type="number" id="spw_ID_target" value="0">
+            </div>
+            <div class="parameter">
+                <label>uvrange_img:</label>
+                <span class="description">Specify uvrange as (for target image)</span>
+                <input type="text" id="uvrange_img" value="">
+            </div>
+            <div class="parameter">
+                <label>apply_mode_selfcal:</label>
+                <span class="description">Apply mode: ('calflag', 'calflagstrict', or 'calonly')</span>
+                <select id="apply_mode_selfcal">
+                    <option value="calflag">calflag</option>
+                    <option value="calflagstrict">calflagstrict</option>
+                    <option value="calonly">calonly</option>
+                </select>
+            </div>
+            <div class="parameter">
+                <label>gridder_img:</label>
+                <span class="description">Used gridder : suggested wproject</span>
+                <select id="gridder_img">
+                    <option value="wproject">wproject</option>
+                </select>
+            </div>
+            <div class="parameter">
+                <label>deconvo_img:</label>
+                <span class="description">Suggested deconvolver: 'mtmfs' (multi-term multi-frequency synthesis)</span>
+                <select id="deconvo_img">
+                    <option value="mtmfs">mtmfs</option>
+                </select>
+            </div>
+            <div class="parameter">
+                <label>scales_img:</label>
+                <span class="description">Specify the scales</span>
+                <input type="text" id="scales_img" value="[0, 6, 10, 30, 60]">
+            </div>
+            <div class="parameter">
+                <label>Weighting for Imaging:</label>
+                <span class="description">Weighting type for tclean: (Can be briggs, natural, uniform)</span>
+                <select id="weighting_img">
+                    <option value="briggs">Briggs</option>
+                    <option value="natural">Natural</option>
+                    <option value="uniform">Uniform</option>
+                </select>
+            </div>
+            <div class="parameter">
+                <label>robust_img:</label>
+                <span class="description">If briggs weighting, specify robust value</span>
+                <input type="number" id="robust_img" value="0.5">
+            </div>
+            <div class="parameter">
+                <label>mask_img_given:</label>
+                <span class="description">If additional user mask is provided</span>
+                <input type="radio" id="mask_img_givenTrue" name="mask_img_given" value="True">
+                <label for="mask_img_givenTrue">True</label>
+                <input type="radio" id="mask_img_givenFalse" name="mask_img_given" value="" checked>
+                <label for="mask_img_givenFalse">False</label>
+            </div>
+            <div class="parameter">
+                <label>mask_img:</label>
+                <span class="description">The additional user mak file given if True</span>
+                <input type="text" id="mask_img" value="[0, 6, 10, 30, 60]">
+            </div>
+            <div class="parameter">
+                <label>interactive_is:</label>
+                <span class="description">Interactive analysis? (warn: experimental)</span>
+                <input type="radio" id="interactive_isTrue" name="interactive_is" value="True">
+                <label for="interactive_isTrue">True</label>
+                <input type="radio" id="interactive_isFalse" name="interactive_is" value="" checked>
+                <label for="interactive_isFalse">False</label>
+            </div>
+            <!-- Add the remaining expert parameters here -->
+        </div>
+
+        <button onclick="exportParams()">Export to JSON</button>
+    </div>
+
+    <script>
+        function exportParams() {
+            var params = {
+                strictlyNecessary: {
+                    proj_name: document.getElementById('proj_name').value,
+                    work_dir: document.getElementById('work_dir').value,
+                    inp_file_type: document.getElementById('inp_file_type').value,
+                    ms_or_fits_file: document.getElementById('ms_or_fits_file').value,
+                    do_ini_flag: document.querySelector('input[name="do_ini_flag"]:checked').value,
+                    do_ini_cal: document.querySelector('input[name="do_ini_cal"]:checked').value,
+                    redo_cal: document.querySelector('input[name="redo_cal"]:checked').value,
+                    do_target_split: document.querySelector('input[name="do_target_split"]:checked').value,
+                    make_image: document.querySelector('input[name="make_image"]:checked').value,
+                    do_selfcal: document.querySelector('input[name="do_selfcal"]:checked').value,
+                    make_stokes_V: document.querySelector('input[name="make_stokes_V"]:checked').value,
+                    // Add the remaining strictly necessary parameters here
+                },
+                important: {
+                    flag_cc_bl: document.querySelector('input[name="flag_cc_bl"]:checked').value,
+                    bad_ants: document.getElementById('bad_ants').value,
+                    ref_ant: document.getElementById('ref_ant').value,
+                    channel_avg: parseInt(document.getElementById('channel_avg').value),
+                    do_hanningsmoth: document.querySelector('input[name="do_hanningsmoth"]:checked').value,
+                    setjy_standard: document.getElementById('setjy_standard').value,
+                    image_size: parseInt(document.getElementById('image_size').value),
+                    cell_size: document.getElementById('cell_size').value,
+                    num_phasecal: parseInt(document.getElementById('num_phasecal').value),
+                    num_apcal: parseInt(document.getElementById('num_apcal').value),
+                    sol_int_phase: document.getElementById('sol_int_phase').value,
+                    num_iter_phase: document.getElementById('num_iter_phase').value,
+                    threshold_phase: document.getElementById('threshold_phase').value,
+                    sol_int_ap: document.getElementById('sol_int_ap').value,
+                    num_iter_ap: document.getElementById('num_iter_ap').value,
+                    threshold_ap: document.getElementById('threshold_ap').value,
+                    // Add the remaining important parameters here
+                },
+                expert: {
+                    solint_sec: parseInt(document.getElementById('solint_sec').value),
+                    quack_interval: parseInt(document.getElementById('quack_interval').value),
+                    uvrange_fluxcal: document.querySelector('input[name="uvrange_fluxcal"]:checked').value,
+                    uv_fluxcal: document.getElementById('uv_fluxcal').value,
+                    clip_zero: document.querySelector('input[name="clip_zero"]:checked').value,
+                    min_snr_calib: parseInt(document.getElementById('min_snr_calib').value),
+                    parang_is: document.querySelector('input[name="parang_is"]:checked').value,
+                    clip_fluxcal: parseInt(document.getElementById('clip_fluxcal').value),
+                    clip_phasecal: parseInt(document.getElementById('clip_phasecal').value),
+                    clip_target: parseInt(document.getElementById('clip_target').value),
+                    extend_percent: parseInt(document.getElementById('extend_percent').value),
+                    calib_rounds: parseInt(document.getElementById('calib_rounds').value),
+                    global_uvrange_is: document.querySelector('input[name="global_uvrange_is"]:checked').value,
+                    global_uvrange: document.getElementById('global_uvrange').value,
+                    do_avg_flag: document.querySelector('input[name="do_avg_flag"]:checked').value,
+                    spw_ID_target: document.getElementById('spw_ID_target').value,
+                    uvrange_img: document.getElementById('uvrange_img').value,
+                    apply_mode_selfcal: document.getElementById('apply_mode_selfcal').value,
+                    gridder_img: document.getElementById('gridder_img').value,
+                    deconvo_img: document.getElementById('deconvo_img').value,
+                    scales_img: document.getElementById('scales_img').value,
+                    weighting_img: document.getElementById('weighting_img').value,
+                    robust_img: parseInt(document.getElementById('robust_img').value),
+                    mask_img_given: document.querySelector('input[name="mask_img_given"]:checked').value,
+                    mask_img: document.getElementById('mask_img').value,
+                    interactive_is: document.querySelector('input[name="interactive_is"]:checked').value,
+                    // Add the remaining expert parameters here
+                }
+            };
+            var json = JSON.stringify(params, null, 2);
+            
+            var blob = new Blob([json], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = document.getElementById('proj_name').value + '_parameters.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
